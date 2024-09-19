@@ -2,10 +2,11 @@ package com.example.api_example.ui
 
 
 import android.os.Bundle
-import android.util.Log
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.api_example.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -13,20 +14,22 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private lateinit var albumViewModel: AlbumViewModel
-    lateinit var binding: ActivityMainBinding
+    private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
         binding = ActivityMainBinding.inflate(layoutInflater)
         albumViewModel = ViewModelProvider(this)[AlbumViewModel::class.java]
         setContentView(binding.root)
 
-        albumViewModel.albums.observe(this, Observer {
-            for (item in it) {
-                Log.i("test", item.id.toString())
-                Log.i("test", item.userId.toString())
-                Log.i("test", item.title)
-            }
-        })
+        binding.recyclerView.layoutManager = LinearLayoutManager(this)
+
+        val myAdapter = AlbumAdapter()
+        binding.recyclerView.adapter = myAdapter
+
+        albumViewModel.albums.observe(this, Observer(myAdapter::submitList))
+        albumViewModel.fetchAlbums()
+
     }
 }
