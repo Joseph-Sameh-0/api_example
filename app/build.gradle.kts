@@ -41,14 +41,14 @@ android {
 }
 
 dependencies {
-    implementation(libs.androidx.lifecycle.livedata.ktx)
-    implementation(libs.androidx.lifecycle.viewmodel.ktx)
-    implementation(libs.retrofit)
-    implementation(libs.converter.gson)
+    val lifecycle_version = "2.2.0"
+    implementation ("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
 
-// Retrofit
-    implementation(libs.retrofit)
-// Retrofit with Scalar Converter
+    implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version")
+    implementation ("androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version")
+
+    implementation ("com.google.dagger:hilt-android:2.52")
     implementation(libs.converter.scalars)
     kapt(libs.hilt.android.compiler)
     implementation(libs.hilt.android)
